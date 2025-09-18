@@ -1,0 +1,59 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
+import UserCard from "../sharedComponents/UserCard";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUsersRequest } from "../store/slices/userSlice";
+import { RootState } from "../store/store";
+
+interface userInfo {
+  id: string; // keep original id
+  name: string; // rename "name" to "label"
+  username: string;
+  email: string;
+  city: string;
+  phone: string;
+  website: string;
+  company: string;
+}
+
+const Userlist = () => {
+  const dispatch = useDispatch();
+  const { data, loading, error } = useSelector(
+    (state: RootState) => state.users
+  );
+  const [mappedUsers, setMappedUsers] = useState<userInfo[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      const transformed = data.map((user: any, index: number) => ({
+        id: user?.id, // keep original id
+        name: user?.name, // rename "name" to "label"
+        username: user?.username,
+        email: user?.email,
+        city: user?.address?.city,
+        phone: user.phone,
+        website: user.website,
+        company: user?.company?.name,
+      }));
+      setMappedUsers(transformed);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    dispatch(fetchUsersRequest());
+  }, [dispatch]);
+
+  return (
+    <div className="p-6 ">
+      <h1 className="text-2xl text-amber-900 font-bold">Userlist</h1>
+      <div className="grid grid-cols-4 gap-4 p-6">
+        {mappedUsers.map((user: any, index: any) => {
+          return <UserCard user={user} key={index} />
+        })}
+      </div>
+    </div>
+  );
+};
+
+export default Userlist;
