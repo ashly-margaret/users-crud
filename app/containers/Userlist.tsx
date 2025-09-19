@@ -28,10 +28,11 @@ const Userlist = () => {
     (state: RootState) => state.users
   );
   const [mappedUsers, setMappedUsers] = useState<userInfo[]>([]);
-  const [popUp,setPopUp] = useState(false)
+  const [popUp, setPopUp] = useState(false);
+  const [selectedUser,setSelectedUser] = useState<userInfo|any>(null)
 
   const handleNavigate = () => {
-    router.push('pages/addUser')
+    router.push("pages/addUser");
   };
 
   useEffect(() => {
@@ -50,13 +51,14 @@ const Userlist = () => {
     }
   }, [data]);
 
-  const handlePoup = ()=>{
-    setPopUp(true)
-  }
+  const handlePoup = (user : userInfo) => {
+    setPopUp(true);
+    setSelectedUser(user)
+  };
 
-  const handleClose = ()=>{
-    setPopUp(false)
-  }
+  const handleClose = () => {
+    setPopUp(false);
+  };
 
   useEffect(() => {
     dispatch(fetchUsersRequest());
@@ -66,17 +68,14 @@ const Userlist = () => {
     <div className="p-6 ">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl text-amber-900 font-bold">Userlist</h1>
-        <ButtonGhost onclick={handleNavigate} label="Add User"/>
+        <ButtonGhost onclick={handleNavigate} label="Add User" />
       </div>
 
       <div className="grid grid-cols-4 gap-4 p-6">
         {mappedUsers.map((user: any, index: any) => {
-          return <UserCard user={user} key={index} onclick= {handlePoup} />;
+          return <UserCard user={user} key={index} onclick={()=>{handlePoup(user)}} />;
         })}
-      {popUp && (
-  <DialogueBox popUp={popUp} handleClose={handleClose} />
-)}
-
+        {popUp && <DialogueBox popUp={popUp} handleClose={handleClose} selectedUser={selectedUser} />}
       </div>
     </div>
   );
