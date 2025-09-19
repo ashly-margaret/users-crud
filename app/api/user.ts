@@ -27,15 +27,17 @@ export const fetchAddUserDetailsApi = async (data: any) => {
   }
 };
 
-export const fetchUpdateUserDetailsApi = async (data: any , id :any) => {
+export const fetchUpdateUserDetailsApi = async (id :any ,data: any  ) => {
+  console.log("update_data",id,data);
+  
   const response = await axios.put(`${users}/${id}`, data, {
     headers: {
       "Content-type": "application/json; charset=UTF-8",
     },
   });
-  console.log("response add user", response);
+  console.log("response update user", response);
   if (response.status === 201 || response.status === 200) {
-    const response = "Successfully Added";
+    const response = "Successfully Updated";
 
     return response;
   } else {

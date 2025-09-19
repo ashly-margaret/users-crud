@@ -17,7 +17,7 @@ interface DialogueBoxTypes {
   popUp: boolean;
   handleClose: () => void;
   selectedUser: any; // ideally type this with your AddUser interface
-  onSubmit: (data :any) => void;
+  onSubmit: (id:any , data :any) => void;
 }
 
 const DialogueBox = ({ popUp, handleClose, selectedUser , onSubmit }: DialogueBoxTypes) => {
@@ -38,7 +38,6 @@ const DialogueBox = ({ popUp, handleClose, selectedUser , onSubmit }: DialogueBo
     },
   });
 
-    const dispatch = useDispatch();
 
 
   // ✅ Whenever selectedUser changes, reset form with its values
@@ -57,11 +56,7 @@ const DialogueBox = ({ popUp, handleClose, selectedUser , onSubmit }: DialogueBo
   }, [selectedUser, reset]);
 
   const submitHandler = (data: any) => {
-    console.log("Edited user:", data);
-  
-        onSubmit(data)
-    
-    
+    onSubmit( selectedUser.id, data)
     handleClose();
   };
 

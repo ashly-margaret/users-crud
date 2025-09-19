@@ -8,9 +8,9 @@ import { RootState } from "../store/store";
 import { ButtonGhost } from "../sharedComponents/Button";
 import { useRouter } from "next/navigation";
 import DialogueBox from "../sharedComponents/DialogueBox";
-import { fetchAddUsersRequest } from "../store/slices/addUserSlice";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
+import { fetchUpdateUsersRequest } from "../store/slices/updateUserSlice";
 
 interface userInfo {
   id: string; // keep original id
@@ -30,8 +30,8 @@ const Userlist = () => {
   const { data, loading, error } = useSelector(
     (state: RootState) => state.users
   );
-  const { userData, userLoading, userError } = useSelector(
-    (state: RootState) => state.AddUser
+  const { updateUserData, updateUserLoading, updateUserError } = useSelector(
+    (state: RootState) => state.UpdateUser
   );
   const [mappedUsers, setMappedUsers] = useState<userInfo[]>([]);
   const [popUp, setPopUp] = useState(false);
@@ -58,6 +58,8 @@ const Userlist = () => {
   }, [data]);
 
   const handlePoup = (user: userInfo) => {
+    console.log("selected", user);
+
     setPopUp(true);
     setSelectedUser(user);
   };
@@ -66,16 +68,19 @@ const Userlist = () => {
     setPopUp(false);
   };
 
-  const onSubmit = (data: userInfo) => {
+  const onSubmit = (id: any, data: userInfo) => {
     // 👉 You can dispatch an updateUser action here
-    dispatch(fetchAddUsersRequest(data));
-    console.log("userData", userData);
+    console.log("updatedData", id, data);
 
-    if (userData) {
-      toast.success(JSON.stringify(userData));
+    dispatch(fetchUpdateUsersRequest({ id, data }));
+
+    if (updateUserData) {
+      console.log("userData", updateUserData);
+
+      toast.success(JSON.stringify(updateUserData));
     }
-    if (userError) {
-      toast.error(userError);
+    if (updateUserError) {
+      toast.error(updateUserError);
     }
   };
 
@@ -105,6 +110,8 @@ const Userlist = () => {
 
       <div className="grid grid-cols-4 gap-4 p-6">
         {mappedUsers.map((user: any, index: any) => {
+          console.log("user", user);
+
           return (
             <UserCard
               user={user}
