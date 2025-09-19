@@ -56,7 +56,7 @@ const Userlist = () => {
     <div className="p-6 ">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl text-amber-900 font-bold">Userlist</h1>
-        <ButtonGhost onclick={handleNavigate} />
+        <ButtonGhost onclick={handleNavigate} label="Add User"/>
       </div>
 
       <div className="grid grid-cols-4 gap-4 p-6">

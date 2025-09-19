@@ -7,6 +7,7 @@ import { RootState } from "../store/store";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
 
+
 const AddUser = () => {
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector(
@@ -24,6 +25,10 @@ const AddUser = () => {
       toast.error(error);
     }
   };
+
+
+
+
   return (
     <div className="flex items-center justify-center min-h-screen">
       <ToastContainer
@@ -39,7 +44,6 @@ const AddUser = () => {
         style={{ zIndex: 9999 }}
         className="!z-[9999]"
       />
-
       <AddUserForm onSubmit={handleAddUser} />
     </div>
   );
