@@ -5,6 +5,8 @@ import UserCard from "../sharedComponents/UserCard";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsersRequest } from "../store/slices/userSlice";
 import { RootState } from "../store/store";
+import { ButtonGhost } from "../sharedComponents/Button";
+import { useRouter } from "next/navigation";
 
 interface userInfo {
   id: string; // keep original id
@@ -19,10 +21,16 @@ interface userInfo {
 
 const Userlist = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
+
   const { data, loading, error } = useSelector(
     (state: RootState) => state.users
   );
   const [mappedUsers, setMappedUsers] = useState<userInfo[]>([]);
+
+  const handleNavigate = () => {
+    router.push('pages/addUser')
+  };
 
   useEffect(() => {
     if (data) {
@@ -46,10 +54,14 @@ const Userlist = () => {
 
   return (
     <div className="p-6 ">
-      <h1 className="text-2xl text-amber-900 font-bold">Userlist</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl text-amber-900 font-bold">Userlist</h1>
+        <ButtonGhost onclick={handleNavigate} />
+      </div>
+
       <div className="grid grid-cols-4 gap-4 p-6">
         {mappedUsers.map((user: any, index: any) => {
-          return <UserCard user={user} key={index} />
+          return <UserCard user={user} key={index} />;
         })}
       </div>
     </div>

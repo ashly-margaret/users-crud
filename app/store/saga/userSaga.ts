@@ -4,7 +4,8 @@ import {
   fetchUsersSuccess,
   fetchUsersFailure,
 } from "../slices/userSlice";
-import { fetchUserDetailsApi } from "@/app/api/user";
+import { fetchAddUserDetailsApi, fetchUserDetailsApi } from "@/app/api/user";
+import { fetchAddUsersFailure, fetchAddUsersRequest, fetchAddUsersSuccess } from "../slices/addUserSlice";
 
 export function* fetchUsersSaga(): Generator<any, void, any> {
   try {
@@ -15,7 +16,19 @@ export function* fetchUsersSaga(): Generator<any, void, any> {
   }
 }
 
+export function* fetchAddUsersSaga(action: ReturnType<typeof fetchAddUsersRequest>): Generator<any, void, any> {
+  try {
+    const response: any = yield call(fetchAddUserDetailsApi, action.payload); // ✅ pass data here
+    yield put(fetchAddUsersSuccess(response));
+  } catch (error: any) {
+    yield put(fetchAddUsersFailure(error.message));
+  }
+}
+
+
 
 export default function* userSaga() {
   yield takeLatest(fetchUsersRequest.type, fetchUsersSaga);
+    yield takeLatest(fetchAddUsersRequest.type, fetchAddUsersSaga);
+
 }

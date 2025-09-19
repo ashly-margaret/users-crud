@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface User {
+interface AddUser {
   id: string; 
   name: string; 
   username: string;
@@ -12,35 +12,39 @@ interface User {
 }
 
 interface UserState {
-  data: User[];
+  data: AddUser | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: UserState = {
-  data: [],
+  data: null,
   loading: false,
   error: null,
 };
 
-const userSlice = createSlice({
-  name: "users",
+const addUserSlice = createSlice({
+  name: "AddUser",
   initialState,
   reducers: {
-    fetchUsersRequest: (state) => {
+    fetchAddUsersRequest: (state, action: PayloadAction<any>) => {
       state.loading = true;
     },
-    fetchUsersSuccess: (state, action: PayloadAction<User[]>) => {
+    fetchAddUsersSuccess: (state, action: PayloadAction<AddUser>) => {
       state.loading = false;
       state.data = action.payload;
     },
-    fetchUsersFailure: (state, action: PayloadAction<string>) => {
+    fetchAddUsersFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.error = action.payload;
     },
   },
 });
 
-export const { fetchUsersRequest, fetchUsersSuccess, fetchUsersFailure } =
-  userSlice.actions;
-export default userSlice.reducer;
+export const { fetchAddUsersRequest, fetchAddUsersSuccess, fetchAddUsersFailure } =
+  addUserSlice.actions;
+export default addUserSlice.reducer;
+
+
+
+
