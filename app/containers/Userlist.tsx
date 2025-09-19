@@ -7,6 +7,7 @@ import { fetchUsersRequest } from "../store/slices/userSlice";
 import { RootState } from "../store/store";
 import { ButtonGhost } from "../sharedComponents/Button";
 import { useRouter } from "next/navigation";
+import DialogueBox from "../sharedComponents/DialogueBox";
 
 interface userInfo {
   id: string; // keep original id
@@ -27,6 +28,7 @@ const Userlist = () => {
     (state: RootState) => state.users
   );
   const [mappedUsers, setMappedUsers] = useState<userInfo[]>([]);
+  const [popUp,setPopUp] = useState(false)
 
   const handleNavigate = () => {
     router.push('pages/addUser')
@@ -48,6 +50,14 @@ const Userlist = () => {
     }
   }, [data]);
 
+  const handlePoup = ()=>{
+    setPopUp(true)
+  }
+
+  const handleClose = ()=>{
+    setPopUp(false)
+  }
+
   useEffect(() => {
     dispatch(fetchUsersRequest());
   }, [dispatch]);
@@ -61,8 +71,12 @@ const Userlist = () => {
 
       <div className="grid grid-cols-4 gap-4 p-6">
         {mappedUsers.map((user: any, index: any) => {
-          return <UserCard user={user} key={index} />;
+          return <UserCard user={user} key={index} onclick= {handlePoup} />;
         })}
+      {popUp && (
+  <DialogueBox popUp={popUp} handleClose={handleClose} />
+)}
+
       </div>
     </div>
   );

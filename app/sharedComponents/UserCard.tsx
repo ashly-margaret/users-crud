@@ -10,6 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Eye } from 'lucide-react';
+
 
 
 interface userInfo {
@@ -25,15 +27,16 @@ interface userInfo {
 
 interface UserCardProps {
   user: userInfo;
+  onclick: ()=> void;
 }
 
-const UserCard = ({ user }: UserCardProps) => {
+const UserCard = ({ user , onclick }: UserCardProps) => {
   return (
     <Card>
       <CardHeader>
         <CardTitle>{user.name}</CardTitle>
         <CardDescription>{user.username}</CardDescription>
-        {/* <CardAction>Card Action</CardAction> */}
+        <CardAction><Eye className="cursor-pointer" onClick={onclick}/></CardAction>
       </CardHeader>
       <CardContent>
         <div>
