@@ -26,3 +26,20 @@ export const fetchAddUserDetailsApi = async (data: any) => {
     throw new Error(response.data.message || "Failed to add user");
   }
 };
+
+export const fetchUpdateUserDetailsApi = async (data: any , id :any) => {
+  const response = await axios.put(`${users}/${id}`, data, {
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  });
+  console.log("response add user", response);
+  if (response.status === 201 || response.status === 200) {
+    const response = "Successfully Added";
+
+    return response;
+  } else {
+    throw new Error(response.data.message || "Failed to add user");
+  }
+};
+

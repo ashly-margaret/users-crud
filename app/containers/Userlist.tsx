@@ -8,6 +8,9 @@ import { RootState } from "../store/store";
 import { ButtonGhost } from "../sharedComponents/Button";
 import { useRouter } from "next/navigation";
 import DialogueBox from "../sharedComponents/DialogueBox";
+import { fetchAddUsersRequest } from "../store/slices/addUserSlice";
+import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
 
 interface userInfo {
   id: string; // keep original id
@@ -27,9 +30,12 @@ const Userlist = () => {
   const { data, loading, error } = useSelector(
     (state: RootState) => state.users
   );
+  const { userData, userLoading, userError } = useSelector(
+    (state: RootState) => state.AddUser
+  );
   const [mappedUsers, setMappedUsers] = useState<userInfo[]>([]);
   const [popUp, setPopUp] = useState(false);
-  const [selectedUser,setSelectedUser] = useState<userInfo|any>(null)
+  const [selectedUser, setSelectedUser] = useState<userInfo | any>(null);
 
   const handleNavigate = () => {
     router.push("pages/addUser");
@@ -51,13 +57,26 @@ const Userlist = () => {
     }
   }, [data]);
 
-  const handlePoup = (user : userInfo) => {
+  const handlePoup = (user: userInfo) => {
     setPopUp(true);
-    setSelectedUser(user)
+    setSelectedUser(user);
   };
 
   const handleClose = () => {
     setPopUp(false);
+  };
+
+  const onSubmit = (data: userInfo) => {
+    // 👉 You can dispatch an updateUser action here
+    dispatch(fetchAddUsersRequest(data));
+    console.log("userData", userData);
+
+    if (userData) {
+      toast.success(JSON.stringify(userData));
+    }
+    if (userError) {
+      toast.error(userError);
+    }
   };
 
   useEffect(() => {
@@ -66,6 +85,19 @@ const Userlist = () => {
 
   return (
     <div className="p-6 ">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        style={{ zIndex: 9999 }}
+        className="!z-[9999]"
+      />
       <div className="flex justify-between items-center">
         <h1 className="text-2xl text-amber-900 font-bold">Userlist</h1>
         <ButtonGhost onclick={handleNavigate} label="Add User" />
@@ -73,9 +105,24 @@ const Userlist = () => {
 
       <div className="grid grid-cols-4 gap-4 p-6">
         {mappedUsers.map((user: any, index: any) => {
-          return <UserCard user={user} key={index} onclick={()=>{handlePoup(user)}} />;
+          return (
+            <UserCard
+              user={user}
+              key={index}
+              onclick={() => {
+                handlePoup(user);
+              }}
+            />
+          );
         })}
-        {popUp && <DialogueBox popUp={popUp} handleClose={handleClose} selectedUser={selectedUser} />}
+        {popUp && (
+          <DialogueBox
+            popUp={popUp}
+            handleClose={handleClose}
+            selectedUser={selectedUser}
+            onSubmit={onSubmit}
+          />
+        )}
       </div>
     </div>
   );

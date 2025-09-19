@@ -10,7 +10,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 const AddUser = () => {
   const dispatch = useDispatch();
-  const { data, loading, error } = useSelector(
+  const { userData, userLoading, userError } = useSelector(
     (state: RootState) => state.AddUser
   );
 
@@ -18,11 +18,11 @@ const AddUser = () => {
     console.log("_test_clicked handleAddUser", payload);
     dispatch(fetchAddUsersRequest(payload));
 
-    if (data) {
-      toast.success(JSON.stringify(data));
+    if (userData) {
+      toast.success(JSON.stringify(userData));
     }
-    if (error) {
-      toast.error(error);
+    if (userError) {
+      toast.error(userError);
     }
   };
 

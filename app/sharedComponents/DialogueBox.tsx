@@ -11,14 +11,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
 interface DialogueBoxTypes {
   popUp: boolean;
   handleClose: () => void;
   selectedUser: any; // ideally type this with your AddUser interface
+  onSubmit: (data :any) => void;
 }
 
-const DialogueBox = ({ popUp, handleClose, selectedUser }: DialogueBoxTypes) => {
+const DialogueBox = ({ popUp, handleClose, selectedUser , onSubmit }: DialogueBoxTypes) => {
   const {
     register,
     handleSubmit,
@@ -35,6 +37,9 @@ const DialogueBox = ({ popUp, handleClose, selectedUser }: DialogueBoxTypes) => 
       city: "",
     },
   });
+
+    const dispatch = useDispatch();
+
 
   // ✅ Whenever selectedUser changes, reset form with its values
   useEffect(() => {
@@ -53,7 +58,10 @@ const DialogueBox = ({ popUp, handleClose, selectedUser }: DialogueBoxTypes) => 
 
   const submitHandler = (data: any) => {
     console.log("Edited user:", data);
-    // 👉 You can dispatch an updateUser action here
+  
+        onSubmit(data)
+    
+    
     handleClose();
   };
 

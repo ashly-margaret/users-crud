@@ -12,15 +12,15 @@ interface AddUser {
 }
 
 interface UserState {
-  data: AddUser | null;
-  loading: boolean;
-  error: string | null;
+  userData: AddUser | null;
+  userLoading: boolean;
+  userError: string | null;
 }
 
 const initialState: UserState = {
-  data: null,
-  loading: false,
-  error: null,
+  userData: null,
+  userLoading: false,
+  userError: null,
 };
 
 const addUserSlice = createSlice({
@@ -28,15 +28,15 @@ const addUserSlice = createSlice({
   initialState,
   reducers: {
     fetchAddUsersRequest: (state, action: PayloadAction<any>) => {
-      state.loading = true;
+      state.userLoading = true;
     },
     fetchAddUsersSuccess: (state, action: PayloadAction<AddUser>) => {
-      state.loading = false;
-      state.data = action.payload;
+      state.userLoading = false;
+      state.userData = action.payload;
     },
     fetchAddUsersFailure: (state, action: PayloadAction<string>) => {
-      state.loading = false;
-      state.error = action.payload;
+      state.userLoading = false;
+      state.userError = action.payload;
     },
   },
 });

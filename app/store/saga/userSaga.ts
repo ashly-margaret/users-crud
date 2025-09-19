@@ -4,7 +4,7 @@ import {
   fetchUsersSuccess,
   fetchUsersFailure,
 } from "../slices/userSlice";
-import { fetchAddUserDetailsApi, fetchUserDetailsApi } from "@/app/api/user";
+import { fetchAddUserDetailsApi, fetchUpdateUserDetailsApi, fetchUserDetailsApi } from "@/app/api/user";
 import { fetchAddUsersFailure, fetchAddUsersRequest, fetchAddUsersSuccess } from "../slices/addUserSlice";
 
 export function* fetchUsersSaga(): Generator<any, void, any> {
@@ -26,7 +26,15 @@ export function* fetchAddUsersSaga(action: ReturnType<typeof fetchAddUsersReques
 }
 
 
-
+export function* fetchUpdateUsersSaga(action: ReturnType<typeof fetchAddUsersRequest>): Generator<any, void, any> {
+  try {
+    const { id, data } = action.payload; // ✅ destructure
+    const response: any = yield call(fetchUpdateUserDetailsApi, data, id); // ✅ pass both
+    yield put(fetchAddUsersSuccess(response));
+  } catch (error: any) {
+    yield put(fetchAddUsersFailure(error.message));
+  }
+}
 export default function* userSaga() {
   yield takeLatest(fetchUsersRequest.type, fetchUsersSaga);
     yield takeLatest(fetchAddUsersRequest.type, fetchAddUsersSaga);
