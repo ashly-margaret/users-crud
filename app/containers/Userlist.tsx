@@ -74,13 +74,12 @@ const Userlist = () => {
     // 👉 You can dispatch a deleteUser action here
     console.log("delete user id", id);
     dispatch(fetchDeleteUsersRequest({ id }));
-    if(deleteUserData){
+    if (deleteUserData) {
       toast.success(JSON.stringify(deleteUserData));
     }
-    if(deleteUserError){
+    if (deleteUserError) {
       toast.error(deleteUserError);
     }
-
   };
 
   const handleClose = () => {
@@ -107,68 +106,71 @@ const Userlist = () => {
     dispatch(fetchUsersRequest());
   }, [dispatch]);
 
-  useEffect(()=>{
-    console.log("loading...",loading);
-    
-  },[loading])
+  useEffect(() => {
+    console.log("loading...", loading);
+  }, [loading]);
 
   return (
     <div className="p-6 ">
-      {
-        loading ? (
-          <div className="flex justify-center items-center h-screen">
-            <BasicLoader/>
-          </div>
-        )
-        :<>
+      {loading ? (
+        <div className="flex justify-center items-center h-screen">
+          <BasicLoader />
+        </div>
+      ) : (
+        <>
           <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        style={{ zIndex: 9999 }}
-        className="!z-[9999]"
-      />
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl text-amber-900 font-bold">Userlist</h1>
-        <ButtonGhost onclick={handleNavigate} label="Add User" />
-      </div>
-
-      <div className="grid grid-cols-4 gap-4 p-6">
-        {mappedUsers.map((user: any, index: any) => {
-          console.log("user", user);
-
-          return (
-            <UserCard
-              user={user}
-              key={index}
-              onclick={() => {
-                handlePoup(user);
-              }}
-              onclickDelete={() => {
-                console.log("delete user");
-                onDelete(user.id);
-              }}
-            />
-          );
-        })}
-        {popUp && (
-          <DialogueBox
-            popUp={popUp}
-            handleClose={handleClose}
-            selectedUser={selectedUser}
-            onSubmit={onSubmit}
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            style={{ zIndex: 9999 }}
+            className="!z-[9999]"
           />
-        )}
-      </div>
+          <div className="flex justify-between items-center">
+            <h1 className="text-2xl text-amber-900 font-bold">Userlist</h1>
+            <ButtonGhost onclick={handleNavigate} label="Add User" />
+          </div>
+
+          {(updateUserLoading || deleteUserLoading) && (
+            <div className="fixed inset-0 bg-[#13131360] bg-opacity-30 flex items-center justify-center z-50">
+              <div className="border-4 border-blue-500 border-t-transparent rounded-full w-12 h-12 animate-spin"></div>
+            </div>
+          )}
+
+          <div className="grid grid-cols-4 gap-4 p-6">
+            {mappedUsers.map((user: any, index: any) => {
+              console.log("user", user);
+
+              return (
+                <UserCard
+                  user={user}
+                  key={index}
+                  onclick={() => {
+                    handlePoup(user);
+                  }}
+                  onclickDelete={() => {
+                    console.log("delete user");
+                    onDelete(user.id);
+                  }}
+                />
+              );
+            })}
+            {popUp && (
+              <DialogueBox
+                popUp={popUp}
+                handleClose={handleClose}
+                selectedUser={selectedUser}
+                onSubmit={onSubmit}
+              />
+            )}
+          </div>
         </>
-      }
-    
+      )}
     </div>
   );
 };
