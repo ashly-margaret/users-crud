@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
 import { fetchUpdateUsersRequest } from "../store/slices/updateUserSlice";
 import { fetchDeleteUsersRequest } from "../store/slices/deleteUserSlice";
+import BasicLoader from "../loader/basicLoader/BasicLoader";
 
 interface userInfo {
   id: string; // keep original id
@@ -106,9 +107,21 @@ const Userlist = () => {
     dispatch(fetchUsersRequest());
   }, [dispatch]);
 
+  useEffect(()=>{
+    console.log("loading...",loading);
+    
+  },[loading])
+
   return (
     <div className="p-6 ">
-      <ToastContainer
+      {
+        loading ? (
+          <div className="flex justify-center items-center h-screen">
+            <BasicLoader/>
+          </div>
+        )
+        :<>
+          <ToastContainer
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
@@ -153,6 +166,9 @@ const Userlist = () => {
           />
         )}
       </div>
+        </>
+      }
+    
     </div>
   );
 };
