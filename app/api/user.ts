@@ -45,3 +45,20 @@ export const fetchUpdateUserDetailsApi = async (id :any ,data: any  ) => {
   }
 };
 
+export const fetchDeleteUserDetailsApi = async (id :any   ) => {
+  console.log("update_data",id);
+
+  const response = await axios.delete(`${users}/${id}`, {
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  });
+  console.log("response delete user", response);
+  if (response.status === 201 || response.status === 200) {
+    const response = "Successfully Deleted";
+
+    return response;
+  } else {
+    throw new Error(response.data.message || "Failed to delete user");
+  }
+};

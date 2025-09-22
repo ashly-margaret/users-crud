@@ -11,6 +11,7 @@ import DialogueBox from "../sharedComponents/DialogueBox";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
 import { fetchUpdateUsersRequest } from "../store/slices/updateUserSlice";
+import { fetchDeleteUsersRequest } from "../store/slices/deleteUserSlice";
 
 interface userInfo {
   id: string; // keep original id
@@ -32,6 +33,10 @@ const Userlist = () => {
   );
   const { updateUserData, updateUserLoading, updateUserError } = useSelector(
     (state: RootState) => state.UpdateUser
+  );
+
+  const { deleteUserData, deleteUserLoading, deleteUserError } = useSelector(
+    (state: RootState) => state.DeleteUser
   );
   const [mappedUsers, setMappedUsers] = useState<userInfo[]>([]);
   const [popUp, setPopUp] = useState(false);
@@ -62,6 +67,19 @@ const Userlist = () => {
 
     setPopUp(true);
     setSelectedUser(user);
+  };
+
+  const onDelete = (id: string) => {
+    // 👉 You can dispatch a deleteUser action here
+    console.log("delete user id", id);
+    dispatch(fetchDeleteUsersRequest({ id }));
+    if(deleteUserData){
+      toast.success(JSON.stringify(deleteUserData));
+    }
+    if(deleteUserError){
+      toast.error(deleteUserError);
+    }
+
   };
 
   const handleClose = () => {
@@ -118,6 +136,10 @@ const Userlist = () => {
               key={index}
               onclick={() => {
                 handlePoup(user);
+              }}
+              onclickDelete={() => {
+                console.log("delete user");
+                onDelete(user.id);
               }}
             />
           );
